@@ -1,0 +1,80 @@
+
+.gallery-container {
+    margin: 20px;
+}
+
+.gallery {
+    text-align: center;
+}
+
+.gallery-title {
+    color: hsl(214, 83%, 18%);
+    font-size: 14px;
+    text-transform: uppercase;
+    margin-bottom: 8px;
+}
+
+.gallery-heading {
+    color: hsl(208, 97%, 12%);
+    font-size: 30px;
+    text-transform: uppercase;
+    margin-bottom: 8px;
+}
+
+.gallery-list {
+    list-style: none;
+    padding: 0;
+    display: flex;
+    justify-content: center;
+    gap: 10px;
+}
+
+.gallery-item {
+    border-radius: 10px;
+    overflow: hidden;
+}
+
+.gallery-image {
+   min-width: auto;
+    height: 300px;
+    border-radius: 10px;
+}
+
+.help-plan {
+    text-align: center;
+}
+
+.help-plan h2 {
+    margin-bottom: 20px;
+}
+
+hr {
+    border: 0;
+    height: 5px;
+    background: rgb(86, 148, 116);
+    width: 20%;
+    margin: 20px auto;
+}
+
+.card {
+    width: 300px;
+    display: inline-block;
+    margin: 10px;
+    text-align: center; /* Center the text within each card */
+}
+
+.card img {
+    max-width: 100%;
+    height: auto;
+}
+
+.card p {
+    color: rgb(71, 103, 137); /* Set the color of the "65+" to orange */
+    font-weight: 800;
+}
+
+.start-para{
+        color: hsl(214, 83%, 18%);
+        font-size: 14px;
+        margin-bottom: 8px;
+}

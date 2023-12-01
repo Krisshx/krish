@@ -1,0 +1,155 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" type="text/css" href="css/login.css">
+    <title>Login</title>
+</head>
+
+<body>
+    <h2>Sign in/up Form</h2>
+    <div class="container" id="container">
+        <div class="form-container sign-up-container">
+            <form id="MainFormSignup" action="#">
+                <h1>Create Account</h1>
+                <span>or use your email for registration</span>
+                <input id="FnameInp" type="text" placeholder="First Name" />
+                <input id="LnameInp" type="text" placeholder="Last Name" />
+
+                <input id="emailInpSignup" type="email" placeholder="Email" />
+                <input id="passwordInpSignup" type="password" placeholder="Password" />
+                <button>Sign Up</button>
+            </form>
+        </div>
+        <div class="form-container sign-in-container">
+            <form id="MainFormSignin" action="#">
+                <h1>Sign in</h1>
+                <input id="emailInpSignin" type="email" id placeholder="Email" />
+                <input id="passwordInpSignin" type="password" placeholder="Password" />
+                <a href="#">Forgot your password?</a>
+                <button>Sign In</button>
+            </form>
+        </div>
+        <div class="overlay-container">
+            <div class="overlay">
+                <div class="overlay-panel overlay-left">
+                    <h1>Welcome Back!</h1>
+                    <p>To keep connected with us please login with your personal info</p>
+                    <button type="submit" class="ghost" id="signIn">Sign In</button>
+                </div>
+                <div class="overlay-panel overlay-right">
+                    <h1>Hello, Friend!</h1>
+                    <p>Enter your personal details and start journey with us</p>
+                    <button type="submit" class="ghost" id="signUp">Sign Up</button>
+                </div>
+            </div>
+        </div>
+    </div>
+    <script type="module">
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/10.6.0/firebase-app.js";
+        import { getDatabase, get, ref, child } from "https://www.gstatic.com/firebasejs/10.6.0/firebase-database.js";
+        import { getAuth, signInWithEmailAndPassword } from "https://www.gstatic.com/firebasejs/10.6.0/firebase-auth.js";
+        import { getAnalytics } from "https://www.gstatic.com/firebasejs/10.6.0/firebase-analytics.js";
+        import { set } from "https://www.gstatic.com/firebasejs/10.6.0/firebase-database.js";
+        import { createUserWithEmailAndPassword } from "https://www.gstatic.com/firebasejs/10.6.0/firebase-auth.js";
+
+        const firebaseConfig = {
+            apiKey: "AIzaSyAuQBO3BxVRc-vq9uYS3cC_r64zymKz1cc",
+            authDomain: "travel-website-webdevelopment.firebaseapp.com",
+            databaseURL: "https://travel-website-webdevelopment-default-rtdb.asia-southeast1.firebasedatabase.app/",
+            projectId: "travel-website-webdevelopment",
+            storageBucket: "travel-website-webdevelopment.appspot.com",
+            messagingSenderId: "154836314241",
+            appId: "1:154836314241:web:421924a9b94701276f4580",
+            measurementId: "G-TB48DDGHZ3"
+        };
+
+        const app = initializeApp(firebaseConfig);
+        const db = getDatabase();
+        const auth = getAuth(app);
+        const analytics = getAnalytics(app);
+        const dbref = ref(db);
+
+        let EmailInpSignin = document.getElementById('emailInpSignin');
+        let PassInpSignin = document.getElementById('passwordInpSignin');
+        let MainFormSignin = document.getElementById('MainFormSignin');
+        let EmailInpSignup = document.getElementById('emailInpSignup');
+        let PassInpSignup = document.getElementById('passwordInpSignup');
+        let FnameInp = document.getElementById('FnameInp');
+        let LnameInp = document.getElementById('LnameInp');
+        let MainFormSignup = document.getElementById('MainFormSignup');
+
+
+
+
+
+
+        let RegisterUser = evt => {
+            evt.preventDefault();
+
+            createUserWithEmailAndPassword(auth, EmailInpSignup.value, PassInpSignup.value).then((credentials) => {
+                set(ref(db, 'UsersAuthList/' + credentials.user.uid), {
+                    firstname: FnameInp.value,
+                    lastname: LnameInp.value
+                })
+
+            })
+                .catch((error) => {
+                    alert(error.message);
+                    console.log(error.code);
+                    console.log(error.message);
+
+                })
+        }
+        MainFormSignup.addEventListener('submit', RegisterUser);
+
+
+
+
+
+
+        let SignInUser = evt => {
+            evt.preventDefault();
+
+            signInWithEmailAndPassword(auth, EmailInpSignin.value, PassInpSignin.value).then((credentials) => {
+                get(child(dbref, 'UsersAuthList/' + credentials.user.uid)).then((snapshot) => {
+                    if (snapshot.exists) {
+                        sessionStorage.setItem("user-info", JSON.stringify({
+                            firstname: snapshot.val().firstname,
+                            lastname: snapshot.val().lastname
+                        }))
+                        sessionStorage.setItem("user-creds", JSON.stringify(credentials.user));
+                        window.location.href = 'index.html';
+                    }
+                })
+
+
+            })
+                .catch((error) => {
+                    alert(error.message);
+                    console.log(error.code);
+                    console.log(error.message);
+
+                })
+        }
+        MainFormSignin.addEventListener('submit', SignInUser);
+    </script>
+
+    <script>
+        const signUpButton = document.getElementById('signUp');
+        const signInButton = document.getElementById('signIn');
+        const container = document.getElementById('container');
+
+        signUpButton.addEventListener('click', () => {
+            container.classList.add("right-panel-active");
+        });
+
+        signInButton.addEventListener('click', () => {
+            container.classList.remove("right-panel-active");
+        });
+    </script>
+</body>
+
+</html>
